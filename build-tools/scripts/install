@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+SOURCE_DIR="$( cd "${0%/*}/../.." && pwd )"
+
+usage() {
+  cat << EOM
+Usage: $0 [<options ...>]
+
+Description:
+
+  This script will install the project to the target k8s cluster.
+
+Options:
+
+  --context     | -c      Kubernetes context.
+
+  --namespace   | -n      Kubernetes namespace.
+
+  --help        | -h      Display this help.
+
+EOM
+}
+
+install() {
+  kubectl --context=$1 create ns $2
+  kubectl --context=$1 --namespace=$2 apply -f $SOURCE_DIR/build-tools/res/manifest.yaml
+}
+
+main() {
+
+  local _context
+  local _namespace
+
+  while (( $# )); do
+    case "$1" in
+      -c|--context)
+        _context=$2
+        shift 2
+        ;;
+      -n|--namespace)
+        _namespace=$2
+        shift 2
+        ;;
+      -h|--h)
+        usage
+        return 0
+        ;;
+      *)
+        usage
+        return 0
+        ;;
+    esac
+  done
+
+  install $_context $_namespace
+  if [[ $? != 0 ]]; then
+    return 1
+  fi
+
+  return 0
+}
+
+main "$@"
+exit $?

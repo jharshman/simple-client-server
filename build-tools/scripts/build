@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+XC_OS="linux darwin freebsd"
+XC_ARCH="amd64 i386"
+DEFAULT_PARALLELISM=2
+DEFAULT_VERSION="0.0.0"
+SOURCE_DIR="$( cd "${0%/*}/../.." && pwd )"
+
+usage() {
+  cat << EOM
+Usage: $0 [<options ...>]
+
+Description:
+
+  This script will build the project for the target architectures
+
+Options:
+
+  --os                List of os targets to build for.
+
+  --arch              List of arch targets to build for.
+
+  --parallel  | -p    Number of parallel builds.
+
+  --version           Set Version Number.
+
+  --help | -h         Display this help.
+
+EOM
+}
+
+build() {
+  pushd $SOURCE_DIR > /dev/null
+  gox -os="${1}" -arch="${2}" -parallel=$3 -output=bin/{{.Dir}}_{{.OS}}_{{.Arch}}
+  popd > /dev/null
+}
+
+main() {
+
+  local _os
+  local _arch
+  local _parallel
+  local _version
+
+  while (( $# )); do
+    case "$1" in
+      --os)
+        _os=$2
+        shift 2
+        ;;
+      --arch)
+        _arch=$2
+        shift 2
+        ;;
+      --parallel|-p)
+        _parallel=$2
+        shift 2
+        ;;
+      --version)
+        _version=$2
+        shift 2
+        ;;
+      *)
+        usage
+        return 0
+        ;;
+    esac
+  done
+
+  build \
+    "${_os:-${XC_OS}}" \
+    "${_arch:-${XC_ARCH}}" \
+    ${_parallel:-${DEFAULT_PARALLELISM}} \
+    ${_version:-${DEFAULT_VERSION}}
+
+  return 0
+}
+
+main "$@"
+exit $?

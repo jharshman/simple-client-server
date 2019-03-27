@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package grpc;
+
+service EchoServer {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}
+
+message EchoRequest {
+  string Data = 1;
+}
+
+message EchoResponse {
+  string Data = 1;
+}
+
+// NOTE:
+// protoc --proto_path=pkg/grpc --go_out=plugins=grpc:pkg/grpc echo.proto

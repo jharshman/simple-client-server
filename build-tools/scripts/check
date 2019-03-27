@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+SOURCE_DIR="$( cd "${0%/*}/../.." && pwd )"
+
+usage() {
+  cat << EOM
+Usage: $0 [<options ...>]
+
+Description:
+
+  This script will check for fmt errors
+
+Options:
+
+  --fmt               Fix formatting.
+
+  --help | -h         Display this help.
+
+EOM
+}
+
+check() {
+  diff -u <(echo -n) <(gofmt -d -s .)
+  return "$?"
+}
+
+fmt() {
+  find . -type f -name "*.go" -exec go fmt {} \;
+}
+
+main() {
+
+  local _fmt=0
+
+  while (( $# )); do
+    case "$1" in
+      --help|-h)
+        usage
+        return 0
+        ;;
+      --fmt)
+        _fmt=1
+        shift
+        ;;
+      *)
+        usage
+        return 0
+        ;;
+    esac
+  done
+
+  local _linty=0
+  pushd $SOURCE_DIR > /dev/null
+  check
+  if [[ "$?" != 0 ]]; then
+    echo "code looks linty"
+    _linty=1
+  fi
+
+  if [[ $_fmt == 1 ]] && [[ $_linty == 1 ]]; then
+    echo "formatting"
+    fmt
+    _linty=0
+  elif [[ $_linty == 0 ]]; then
+    echo "nothing to format"
+  fi
+  popd > /dev/null
+
+  return $_linty
+}
+
+main "$@"
+exit $?
