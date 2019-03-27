@@ -45,8 +45,8 @@ var serverCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(serverCmd)
 
-	rootCmd.Flags().StringVar(&port, "port", "9000", "grpc bind address")
-	rootCmd.Flags().StringVar(&loglvl, "loglvl", "info", "log level")
+	serverCmd.Flags().StringVar(&port, "port", "9000", "grpc bind address")
+	serverCmd.Flags().StringVar(&loglvl, "loglvl", "info", "log level")
 
-	viper.BindPFlags(rootCmd.Flags())
+	viper.BindPFlags(serverCmd.Flags())
 }
