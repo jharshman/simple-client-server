@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"github.com/jharshman/simple-client-server/config"
+	"github.com/jharshman/simple-client-server/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -37,7 +38,7 @@ var serverCmd = &cobra.Command{
 		if err := viper.Unmarshal(&cfg); err != nil {
 			log.Fatalf("unmarshal server config: %v\n", err)
 		}
-		// start server
+		server.Start(&cfg)
 	},
 }
 
