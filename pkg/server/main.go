@@ -14,6 +14,10 @@ import (
 func Start(cfg *config.Server) error {
 	initLogger(cfg.LogLevel())
 
+	//debug logging
+	log.Debugf("port %s\n", cfg.Port)
+	log.Debugf("log level %s\n", cfg.LogLvl)
+
 	lis, err := net.Listen("tcp", cfg.BindPort())
 	if err != nil {
 		return err
