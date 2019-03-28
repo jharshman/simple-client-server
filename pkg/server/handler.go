@@ -7,6 +7,6 @@ import (
 
 type handler struct{}
 
-func (h *handler) Echo(ctx context.Context, in *grpc.EchoRequest) (*grpc.EchoResponse, error) {
-	return &grpc.EchoResponse{}, nil
+func (h *handler) Echo(ctx context.Context, in *grpc.Message) (*grpc.Message, error) {
+	return in, nil
 }

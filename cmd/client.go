@@ -17,36 +17,63 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
+	"context"
+	"github.com/jharshman/simple-client-server/config"
+	"github.com/jharshman/simple-client-server/pkg/grpc"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	rpc "google.golang.org/grpc"
+	"net"
 
 	"github.com/spf13/cobra"
+)
+
+var (
+	clientCfg  config.Client
+	serverAddr string
+	serverPort string
+	msg        string
 )
 
 // clientCmd represents the client command
 var clientCmd = &cobra.Command{
 	Use:   "client",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Echo Client",
+	Long: `
+Facilitates communication to Echo Server.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("client called")
+		if err := viper.Unmarshal(&clientCfg); err != nil {
+			log.Fatalf("unmarshal client config: %v\n", err)
+		}
+		// run client
+		if clientCfg.Message == "" {
+			log.Fatalln("no message to send")
+		}
+
+		conn, err := rpc.Dial(net.JoinHostPort(clientCfg.Addr, clientCfg.Port), rpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("grpc dial: %v\n", err)
+		}
+		defer conn.Close()
+
+		echoCli := grpc.NewEchoServerClient(conn)
+		res, err := echoCli.Echo(context.Background(), &grpc.Message{
+			Data: msg,
+		})
+		if err != nil {
+			log.Fatalf("receiving response: %v\n", err)
+		}
+
+		log.Infof("%s\n", res.Data)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(clientCmd)
 
-	// Here you will define your flags and configuration settings.
+	clientCmd.Flags().StringVar(&serverAddr, "server", "127.0.0.1", "address of echo server")
+	clientCmd.Flags().StringVar(&serverPort, "port", "9000", "port of echo server")
+	clientCmd.Flags().StringVar(&msg, "msg", "", "message to send to echo server")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// clientCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// clientCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	viper.BindPFlags(clientCmd.Flags())
 }

@@ -10,6 +10,12 @@ type Server struct {
 	LogLvl string `mapstructure:"loglvl"`
 }
 
+type Client struct {
+	Addr    string `mapstructure:"server"`
+	Port    string `mapstructure:"port"`
+	Message string `mapstructure:"msg"`
+}
+
 func (s *Server) BindPort() string {
 	return fmt.Sprintf(":%s", s.Port)
 }

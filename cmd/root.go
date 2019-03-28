@@ -21,7 +21,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
@@ -33,7 +33,7 @@ var (
 		Long: `
 A simple echo client and server implementation.
 `,
-		//	Run: func(cmd *cobra.Command, args []string) { },
+		//Run: func(cmd *cobra.Command, args []string) {},
 	}
 )
 

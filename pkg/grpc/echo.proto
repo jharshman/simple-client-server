@@ -3,14 +3,10 @@ syntax = "proto3";
 package grpc;
 
 service EchoServer {
-  rpc Echo(EchoRequest) returns (EchoResponse);
+  rpc Echo(Message) returns (Message);
 }
 
-message EchoRequest {
-  string Data = 1;
-}
-
-message EchoResponse {
+message Message {
   string Data = 1;
 }
 
