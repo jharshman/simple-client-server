@@ -25,9 +25,11 @@ import (
 )
 
 var (
-	cfg    config.Server
-	port   string
-	loglvl string
+	cfg      config.Server
+	port     string
+	loglvl   string
+	certFile string
+	keyFile  string
 )
 
 var serverCmd = &cobra.Command{
@@ -47,6 +49,8 @@ func init() {
 
 	serverCmd.Flags().StringVar(&port, "port", "9000", "grpc bind address")
 	serverCmd.Flags().StringVar(&loglvl, "loglvl", "info", "log level")
+	serverCmd.Flags().StringVar(&certFile, "cert", "cert.pem", "tls cert")
+	serverCmd.Flags().StringVar(&keyFile, "key", "key.pem", "tls key")
 
 	viper.BindPFlags(serverCmd.Flags())
 }

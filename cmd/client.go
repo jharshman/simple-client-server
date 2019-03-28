@@ -23,6 +23,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	rpc "google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"net"
 
 	"github.com/spf13/cobra"
@@ -33,6 +34,7 @@ var (
 	serverAddr string
 	serverPort string
 	msg        string
+	clientCert string
 )
 
 // clientCmd represents the client command
@@ -50,7 +52,14 @@ Facilitates communication to Echo Server.`,
 			log.Fatalln("no message to send")
 		}
 
-		conn, err := rpc.Dial(net.JoinHostPort(clientCfg.Addr, clientCfg.Port), rpc.WithInsecure())
+		tls, err := credentials.NewClientTLSFromFile(clientCfg.CertFile, "")
+		if err != nil {
+			log.Fatalf("%v\n", err)
+		}
+		opts := []rpc.DialOption{
+			rpc.WithTransportCredentials(tls),
+		}
+		conn, err := rpc.Dial(net.JoinHostPort(clientCfg.Addr, clientCfg.Port), opts...)
 		if err != nil {
 			log.Fatalf("grpc dial: %v\n", err)
 		}
@@ -72,8 +81,9 @@ func init() {
 	rootCmd.AddCommand(clientCmd)
 
 	clientCmd.Flags().StringVar(&serverAddr, "server", "127.0.0.1", "address of echo server")
-	clientCmd.Flags().StringVar(&serverPort, "port", "9000", "port of echo server")
+	clientCmd.Flags().StringVar(&serverPort, "server-port", "9000", "port of echo server")
 	clientCmd.Flags().StringVar(&msg, "msg", "", "message to send to echo server")
+	clientCmd.Flags().StringVar(&clientCert, "client-cert", "cert.pem", "client tls certificate")
 
 	viper.BindPFlags(clientCmd.Flags())
 }

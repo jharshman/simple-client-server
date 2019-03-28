@@ -5,6 +5,7 @@ import (
 	"github.com/jharshman/simple-client-server/pkg/grpc"
 	log "github.com/sirupsen/logrus"
 	rpc "google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"net"
 	"os"
 	"os/signal"
@@ -17,6 +18,8 @@ func Start(cfg *config.Server) error {
 	//debug logging
 	log.Debugf("port %s\n", cfg.Port)
 	log.Debugf("log level %s\n", cfg.LogLvl)
+	log.Debugf("cert file %s\n", cfg.CertFile)
+	log.Debugf("key file %s\n", cfg.KeyFile)
 
 	lis, err := net.Listen("tcp", cfg.BindPort())
 	if err != nil {
@@ -24,8 +27,13 @@ func Start(cfg *config.Server) error {
 	}
 	defer lis.Close()
 
+	tls, _ := credentials.NewServerTLSFromFile(cfg.CertFile, cfg.KeyFile)
+	opts := []rpc.ServerOption{
+		rpc.Creds(tls),
+	}
+	grpcServer := rpc.NewServer(opts...)
+
 	srv := &handler{}
-	grpcServer := rpc.NewServer()
 	grpc.RegisterEchoServerServer(grpcServer, srv)
 
 	done := make(chan os.Signal, 1)

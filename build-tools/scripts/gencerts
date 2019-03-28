@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+SOURCE_DIR="$( cd "${0%/*}/../.." && pwd )"
+mkdir -p ${SOURCE_DIR}/bin/tls
+
+openssl req \
+  -newkey rsa:2048 \
+  -nodes -keyout ${SOURCE_DIR}/bin/tls/key.pem \
+  -out ${SOURCE_DIR}/bin/tls/csr \
+  -config ${SOURCE_DIR}/build-tools/res/openssl.cfg
+
+openssl x509 -req \
+  -days 10 \
+  -in ${SOURCE_DIR}/bin/tls/csr \
+  -signkey ${SOURCE_DIR}/bin/tls/key.pem \
+  -out ${SOURCE_DIR}/bin/tls/cert.pem \
+  -extensions v3_req \
+  -extfile ${SOURCE_DIR}/build-tools/res/openssl.cfg

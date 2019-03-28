@@ -31,6 +31,7 @@ EOM
 
 build() {
   pushd $SOURCE_DIR > /dev/null
+  mkdir -p bin
   gox -os="${1}" -arch="${2}" -parallel=$3 -output=bin/{{.Dir}}_{{.OS}}_{{.Arch}}
   popd > /dev/null
 }

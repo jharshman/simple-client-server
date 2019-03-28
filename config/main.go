@@ -6,14 +6,17 @@ import (
 )
 
 type Server struct {
-	Port   string `mapstructure:"port"`
-	LogLvl string `mapstructure:"loglvl"`
+	Port     string `mapstructure:"port"`
+	LogLvl   string `mapstructure:"loglvl"`
+	CertFile string `mapstructure:"cert"`
+	KeyFile  string `mapstructure:"key"`
 }
 
 type Client struct {
-	Addr    string `mapstructure:"server"`
-	Port    string `mapstructure:"port"`
-	Message string `mapstructure:"msg"`
+	Addr     string `mapstructure:"server"`
+	Port     string `mapstructure:"server-port"`
+	Message  string `mapstructure:"msg"`
+	CertFile string `mapstructure:"client-cert"`
 }
 
 func (s *Server) BindPort() string {
