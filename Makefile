@@ -1,3 +1,5 @@
+.PHONY: fmt build gencerts run_server run_client check_fmt release protobuf mockgen clean
+
 default: build
 
 fmt:
