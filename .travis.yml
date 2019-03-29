@@ -16,9 +16,9 @@ script:
   - go test -v ./...
   - make build
 
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: make release
-  on:
-    branch: master
+#deploy:
+#  skip_cleanup: true
+#  provider: script
+#  script: make release
+#  on:
+#    branch: master
