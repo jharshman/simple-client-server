@@ -14,3 +14,11 @@ before_script:
 script: 
   - make check_fmt
   - go test -v ./...
+  - make build
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: make release
+  on:
+    branch: master

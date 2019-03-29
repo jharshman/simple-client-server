@@ -19,11 +19,7 @@ check_fmt:
 	./build-tools/scripts/check
 
 release:
-	docker build -f build-tools/res/Dockerfile -t jharshman/simple-client-server ./bin
-
-publish: build release
-	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
-	docker push jharshman/simple-client-server:latest
+	./build-tools/scripts/release $(DOCKER_USER) $(DOCKER_PASSWORD)
 
 protobuf:
 	protoc --proto_path=pkg/grpc --go_out=plugins=grpc:pkg/grpc echo.proto

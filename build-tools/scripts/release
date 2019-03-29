@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+docker build -f build-tools/res/Dockerfile -t jharshman/simple-client-server:latest ./bin
+docker login -u $1 -p $2
+docker push jharshman/simple-client-server:latest:latest
