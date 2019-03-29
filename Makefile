@@ -25,5 +25,11 @@ publish: build release
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
 	docker push jharshman/simple-client-server:latest
 
+protobuf:
+	protoc --proto_path=pkg/grpc --go_out=plugins=grpc:pkg/grpc echo.proto
+
+mockgen:
+	mockgen --source=pkg/grpc/echo.pb.go --destination=mock/echo.go --package=mock
+
 clean:
 	rm -rf ./bin/*

@@ -14,4 +14,3 @@ before_script:
 script: 
   - make check_fmt
   - go test -v ./...
-  - make publish
