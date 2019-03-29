@@ -26,3 +26,37 @@ $ make run_server
 ```
 $ make run_client
 ```
+
+# Component Breakdown
+## Server Usage
+```
+➜  simple-client-server git:(master) ./bin/simple-client-server_darwin_amd64 server --help
+Run the echo server
+
+Usage:
+  simple-client-server server [flags]
+
+Flags:
+      --cert string     tls cert (default "cert.pem")
+  -h, --help            help for server
+      --key string      tls key (default "key.pem")
+      --loglvl string   log level (default "info")
+      --port string     grpc bind address (default "9000")
+```
+
+## Client Usage
+```
+➜  simple-client-server git:(master) ✗ ./bin/simple-client-server_darwin_amd64 client --help
+
+Facilitates communication to Echo Server.
+
+Usage:
+  simple-client-server client [flags]
+
+Flags:
+      --client-cert string   client tls certificate (default "cert.pem")
+  -h, --help                 help for client
+      --msg string           message to send to echo server
+      --server string        address of echo server (default "127.0.0.1")
+      --server-port string   port of echo server (default "9000")
+```
