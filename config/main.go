@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Server encapsulates server configuration properties.
 type Server struct {
 	Port     string `mapstructure:"port"`
 	LogLvl   string `mapstructure:"loglvl"`
@@ -12,6 +13,7 @@ type Server struct {
 	KeyFile  string `mapstructure:"key"`
 }
 
+// Client encapsulates client configuration properties.
 type Client struct {
 	Addr     string `mapstructure:"server"`
 	Port     string `mapstructure:"server-port"`
@@ -19,10 +21,13 @@ type Client struct {
 	CertFile string `mapstructure:"client-cert"`
 }
 
+// BindPort returns port number prefixed with a colon.
+// i.e: ":8080"
 func (s *Server) BindPort() string {
 	return fmt.Sprintf(":%s", s.Port)
 }
 
+// LogLevel returns the log.Level type.
 func (s *Server) LogLevel() log.Level {
 	var l log.Level
 	switch s.LogLvl {

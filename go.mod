@@ -1,8 +1,10 @@
 module github.com/jharshman/simple-client-server
 
 require (
+	github.com/golang/mock v1.1.1
 	github.com/golang/protobuf v1.2.0
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/matryer/is v1.2.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.4.0
 	github.com/spf13/cobra v0.0.3

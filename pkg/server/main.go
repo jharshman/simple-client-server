@@ -12,6 +12,7 @@ import (
 	"syscall"
 )
 
+// Start initializes the gRPC server process.
 func Start(cfg *config.Server) error {
 	initLogger(cfg.LogLevel())
 

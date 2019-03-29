@@ -6,6 +6,7 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
+	msg "github.com/jharshman/simple-client-server/pkg/grpc"
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 	reflect "reflect"
@@ -35,13 +36,13 @@ func (m *MockEchoServerClient) EXPECT() *MockEchoServerClientMockRecorder {
 }
 
 // Echo mocks base method
-func (m *MockEchoServerClient) Echo(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
+func (m *MockEchoServerClient) Echo(ctx context.Context, in *msg.Message, opts ...grpc.CallOption) (*msg.Message, error) {
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "Echo", varargs...)
-	ret0, _ := ret[0].(*Message)
+	ret0, _ := ret[0].(*msg.Message)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -76,9 +77,9 @@ func (m *MockEchoServerServer) EXPECT() *MockEchoServerServerMockRecorder {
 }
 
 // Echo mocks base method
-func (m *MockEchoServerServer) Echo(arg0 context.Context, arg1 *Message) (*Message, error) {
+func (m *MockEchoServerServer) Echo(arg0 context.Context, arg1 *msg.Message) (*msg.Message, error) {
 	ret := m.ctrl.Call(m, "Echo", arg0, arg1)
-	ret0, _ := ret[0].(*Message)
+	ret0, _ := ret[0].(*msg.Message)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
