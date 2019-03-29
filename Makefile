@@ -4,7 +4,7 @@ fmt:
 	./build-tools/scripts/check --fmt
 
 build:
-	./build-tools/scripts/build
+	./build-tools/scripts/build -p 3
 
 gencerts:
 	./build-tools/scripts/gencerts
@@ -20,10 +20,10 @@ check_fmt:
 
 release:
 	docker build -f build-tools/res/Dockerfile -t jharshman/simple-client-server ./bin
-	# docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
 
-install:
-	./build-tools/scripts/install -c $(CTX) -n $(NS)
+publish: build gencerts release
+	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
+	docker push jharshman/simple-client-server:latest
 
 clean:
 	rm -rf ./bin/*
