@@ -21,7 +21,7 @@ check_fmt:
 release:
 	docker build -f build-tools/res/Dockerfile -t jharshman/simple-client-server ./bin
 
-publish: build gencerts release
+publish: build release
 	docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
 	docker push jharshman/simple-client-server:latest
 
