@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 SOURCE_DIR="$( cd "${0%/*}/../.." && pwd )"
-docker build -f ${SOURCE_DIR}/build-tools/res/Dockerfile -t jharshman/simple-client-server:latest ./bin
+docker build -f ${SOURCE_DIR}/build-tools/res/Dockerfile -t jharshman/simple-client-server:latest ${SOURCE_DIR}/bin
 docker login -u $1 -p $2
 docker push jharshman/simple-client-server:latest:latest
